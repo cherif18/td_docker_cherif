@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  database:
+    image: mariadb:latest
+    environment:
+      MYSQL_USER: USER
+      MYSQL_PASSWORD: PASSWORD
+      MYSQL_ROOT_PASSWORD: ROOT_PASSWORD
+      MYSQL_DATABASE: docker
+    networks:
+      - back
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    build: 
+      context: ./bff/target
+    depends_on:
+      - database
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    volumes:
+      - ./bff/target/application-docker.properties:/app/application-docker.properties
+    networks:
+      - back
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./front/browser
+    ports:
+      - "8081:80"
+    networks:
+      - front
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - database
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: USER
+      PMA_PASSWORD: PASSWORD
+    ports:
+      - "8081:80"
+    networks:
+      - back
+
+networks:
+  front:
+  back:
+
+volumes:
+  db_data:
