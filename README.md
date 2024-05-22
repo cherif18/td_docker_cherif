@@ -26,5 +26,5 @@ docker-compose up
 
 Lien dockerHub :
 
-- front: https://hub.docker.com/r/bambouzelle/front
-- pour le BFF : https://hub.docker.com/r/bambouzelle/bff
+- front: https://hub.docker.com/r/sirifou/frontend
+- back : https://hub.docker.com/r/sirifou/backend
